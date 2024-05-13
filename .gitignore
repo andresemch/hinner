@@ -1,0 +1,11 @@
+# Python temporary data
+
+*__pycache__*
+
+# Grammar generated files
+
+*.interp
+*.tokens
+hmParser.py
+hmLexer.py
+hmVisitor.py
