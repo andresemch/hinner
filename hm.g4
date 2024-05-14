@@ -33,18 +33,26 @@
 
 grammar hm;
 
-root : expr               #expressio
+root : expr               #rootExpr
+    | exprTipus           #rootTipus
     | EOF                 #endfile
-    | expr '::' tipus     #defTipus
     ;
 
-tipus : basic             #tipusBasic
-    | basic '->' tipus    #tipusFunc
+exprTipus : left=num '::' right=tipus       #numTipus
+    | '(' left=op ')' '::' right=tipus      #opTipus
     ;
 
-basic : 'N'
-    | 'B'
+tipus : tipus '->' tipus    #funcTipus
+    | elemTipus             #basicTipus
     ;
+
+elemTipus : 'N'
+    ;
+
+// tipus : VAR '::' TIPUS                               #tipusLiteral
+//     | '(' op ')' '::' TIPUS '->' TIPUS '->' TIPUS    #tipusFunc
+//     ;
+
 
 // Punt d'entrada de la gramàtica
 expr : abstraccio   
@@ -52,11 +60,7 @@ expr : abstraccio
     | var           
     | num
     | op
-    // | parentesi
     ;
-
-// parentesi : '(' expr ')'
-//     ;
 
 abstraccio : <assoc=right> '\\' var '->' expr
     ;
@@ -81,9 +85,11 @@ op : '*'    #multOp
 // Tokens
 NUM : [0-9]+ ;
 
-VAR : [a-zA-Z_][a-zA-Z_0-9]* ;
+VAR : [a-z][a-zA-Z_0-9]* ;
 
-// OP : '+' | '-' | '*' | '/' | '->' ;
+TIPUS : [A-Z]+ ;
+
+OP : '+' | '-' | '*' | '/';
 
 // Ignorar espais en blanc
 WS      : [ \t\r\n]+ -> skip            // Ignorar espais en blanc

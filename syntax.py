@@ -7,8 +7,6 @@ def syntaxInfo(input):
     token_stream = CommonTokenStream(lexer)
     parser = hmParser(token_stream)
     parseTree = parser.root()
-    
     numErrors = parser.getNumberOfSyntaxErrors()
     syntaxExpr = parseTree.toStringTree(recog=parser)
-    
     return parseTree, numErrors, syntaxExpr

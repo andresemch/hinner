@@ -9,20 +9,55 @@ class hinnerVisitor(ParseTreeVisitor):
     def __init__(self):
         self.taulaTipus = {}
 
-    # Visit a parse tree produced by hmParser#expressio.
-    def visitExpressio(self, ctx:hmParser.ExpressioContext):
+    # Visit a parse tree produced by hmParser#rootExpr.
+    def visitRootExpr(self, ctx:hmParser.RootExprContext):
         [expr] = ctx.getChildren()
         return SemanticTree(self.visit(expr))
+    
+    # Visit a parse tree produced by hmParser#rootTipus.
+    def visitRootTipus(self, ctx:hmParser.RootTipusContext):
+        return self.visitChildren(ctx)
     
     # Visit a parse tree produced by hmParser#endfile.
     def visitEndfile(self, ctx:hmParser.EndfileContext):
         return SemanticTree(None)
     
-    # Visit a parse tree produced by hmParser#defTipus.
-    def visitDefTipus(self, ctx:hmParser.DefTipusContext):
-        [expr, _, tipus] = list(ctx.getChildren())
-        self.taulaTipus[expr] = tipus
 
+    
+    ##### TYPE VISITOR #####
+    ## Start
+
+    # Visit a parse tree produced by hmParser#numTipus.
+    def visitNumTipus(self, ctx:hmParser.NumTipusContext):
+        symbol = self.visit(ctx.left).val
+        type_info = self.visit(ctx.right)
+
+        return {symbol: [type_info]}
+
+    # Visit a parse tree produced by hmParser#opTipus.
+    def visitOpTipus(self, ctx:hmParser.OpTipusContext):
+        symbol = self.visit(ctx.left).op.value
+        type_info = self.visit(ctx.right)
+
+        return {symbol: [type_info]}
+
+    # Visit a parse tree produced by hmParser#funcTipus.
+    def visitFuncTipus(self, ctx:hmParser.FuncTipusContext):
+        left_type = self.visit(ctx.tipus(0))
+        right_type = self.visit(ctx.tipus(1))
+
+        return f"{left_type} -> {right_type}"
+
+    # Visit a parse tree produced by hmParser#basicTipus.
+    def visitBasicTipus(self, ctx:hmParser.BasicTipusContext):
+        return self.visit(ctx.elemTipus())
+
+    # Visit a parse tree produced by hmParser#elemTipus.
+    def visitElemTipus(self, ctx:hmParser.ElemTipusContext):
+        return ctx.getText()
+    
+    ## End
+    ##### TYPE VISITOR #####
     
 
     # Visit a parse tree produced by hmParser#expr.
