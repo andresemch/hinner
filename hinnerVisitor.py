@@ -43,10 +43,10 @@ class hinnerVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by hmParser#funcTipus.
     def visitFuncTipus(self, ctx:hmParser.FuncTipusContext):
-        left_type = self.visit(ctx.tipus(0))
-        right_type = self.visit(ctx.tipus(1))
+        left_type = self.visit(ctx.elemTipus())
+        right_type = self.visit(ctx.tipus())
 
-        return f"{left_type} -> {right_type}"
+        return f"({left_type} -> {right_type})"
 
     # Visit a parse tree produced by hmParser#basicTipus.
     def visitBasicTipus(self, ctx:hmParser.BasicTipusContext):

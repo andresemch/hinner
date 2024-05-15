@@ -38,11 +38,11 @@ root : expr               #rootExpr
     | EOF                 #endfile
     ;
 
-exprTipus : left=num '::' right=tipus       #numTipus
+exprTipus : left=num '::' right=elemTipus       #numTipus
     | '(' left=op ')' '::' right=tipus      #opTipus
     ;
 
-tipus : tipus '->' tipus    #funcTipus
+tipus : elemTipus '->' tipus    #funcTipus
     | elemTipus             #basicTipus
     ;
 

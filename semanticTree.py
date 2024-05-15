@@ -51,6 +51,7 @@ def termToString(f):
 class SemanticTree:
     root: Expr
     count: int = field(default=0)
+    tipus: 
 
     def toDOT(self):
         dot = ["graph {"]
