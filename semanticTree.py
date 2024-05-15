@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Union
+from typing import Union, Optional
 from enum import Enum
 
 
@@ -12,104 +12,102 @@ class Op(Enum):
 @dataclass
 class Numero:
     val: int
+    tipus: Optional[str] = None
 
 @dataclass
 class Variable:
     id: str
+    tipus: Optional[str] = None
 
 @dataclass
 class Operador:
     op: Op
+    tipus: Optional[str] = None
 
 @dataclass
 class Aplicacio:
-    left: Union['Aplicacio', 'Operador']
-    right: 'Expr'
+    esq: Union['Aplicacio', 'Operador']
+    dre: 'Expr'
+    tipus: Optional[str] = None
 
 @dataclass
 class Abstraccio:
-    left: 'Variable'
-    right: 'Expr'
+    esq: 'Variable'
+    dre: 'Expr'
+    tipus: Optional[str] = None
 
 Expr = Abstraccio | Aplicacio | Variable | Numero
 
 
 def termToString(f):
+    tipus = f"\n{f.tipus}" if f.tipus else ""
     match f:
         case Abstraccio(_, _):
-            return 'λ'
+            return f'λ{tipus}'
         case Aplicacio(_, _):
-            return '@'
+            # return '@'
+            return f'@{tipus}'
         case Variable(iden):
-            return iden
+            return f'{iden}{tipus}'
         case Operador(op):
-            return op.value
+            # return op.value
+            return f'({op.value}){tipus}'
         case Numero(val):
-            return str(val)
+            # return str(val)
+            return f'{val}{tipus}'
 
 @dataclass 
 class SemanticTree:
     root: Expr
     count: int = field(default=0)
-    tipus: 
 
     def toDOT(self):
         dot = ["graph {"]
-
         self.toDOTRecursive(self.root, dot)
-        
         dot.append("}")
-
         return "\n".join(dot)
     
     def toDOTRecursive(self, node, dot):
         match node:
             case Abstraccio(inp, out):
-                nodeID = self.count
+                nodeIden = self.count
                 self.count = self.count + 1
                     
-                dot.append(f'   {nodeID} [label="{termToString(node)}"]')
-                
-                child1ID = self.count
+                dot.append(f'   {nodeIden} [label="{termToString(node)}"]')
+                fillEsq = self.count
                 
                 self.toDOTRecursive(inp, dot)
-                
-                child2ID = self.count
+                fillDre = self.count
                 
                 self.toDOTRecursive(out, dot)
-                
-                dot.append(f'   {nodeID} -- {child1ID}')
-                dot.append(f'   {nodeID} -- {child2ID}')
+                dot.append(f'   {nodeIden} -- {fillEsq}')
+                dot.append(f'   {nodeIden} -- {fillDre}')
                 
             case Aplicacio(func, arg):
-                nodeID = self.count
+                nodeIden = self.count
                 self.count = self.count + 1
                     
-                dot.append(f'   {nodeID} [label="{termToString(node)}"]')
-                
-                child1ID = self.count
+                dot.append(f'   {nodeIden} [label="{termToString(node)}"]')
+                fillEsq = self.count
                 
                 self.toDOTRecursive(func, dot)
-                
-                child2ID = self.count
+                fillDre = self.count
                 
                 self.toDOTRecursive(arg, dot)
-                
-                dot.append(f'   {nodeID} -- {child1ID}')
-                dot.append(f'   {nodeID} -- {child2ID}')
+                dot.append(f'   {nodeIden} -- {fillEsq}')
+                dot.append(f'   {nodeIden} -- {fillDre}')
                 
             case Variable(iden):
-                nodeID = self.count
+                nodeIden = self.count
                 self.count = self.count + 1
-                    
-                dot.append(f'   {nodeID} [label="{termToString(node)}"]')
+                dot.append(f'   {nodeIden} [label="{termToString(node)}"]')
+
             case Operador(op):
-                nodeID = self.count
+                nodeIden = self.count
                 self.count = self.count + 1
-                    
-                dot.append(f'   {nodeID} [label="{termToString(node)}"]')
+                dot.append(f'   {nodeIden} [label="{termToString(node)}"]')
+                
             case Numero(val):
-                nodeID = self.count
+                nodeIden = self.count
                 self.count = self.count + 1
-                    
-                dot.append(f'   {nodeID} [label="{termToString(node)}"]')
+                dot.append(f'   {nodeIden} [label="{termToString(node)}"]')

@@ -7,7 +7,7 @@ from semanticTree import *
 class hinnerVisitor(ParseTreeVisitor):
 
     def __init__(self):
-        self.taulaTipus = {}
+        self.taulaTipus = [chr(i) for i in range(ord('a'), ord('z') + 1)]
 
     # Visit a parse tree produced by hmParser#rootExpr.
     def visitRootExpr(self, ctx:hmParser.RootExprContext):
@@ -66,19 +66,25 @@ class hinnerVisitor(ParseTreeVisitor):
 
     def visitAbstraccio(self, ctx:hmParser.AbstraccioContext):
         [_, var, _, expr] = list(ctx.getChildren())
-        return Abstraccio(self.visit(var), self.visit(expr))
+        varTipus = self.taulaTipus[0]
+        self.taulaTipus.pop(0)
+        return Abstraccio(esq=self.visit(var), dre=self.visit(expr), tipus=varTipus)
 
 
     # Visit a parse tree produced by hmParser#parenApli.
     def visitParentesiAplicacio(self, ctx:hmParser.ParentesiAplicacioContext):
         [_, absOp, _, expr] = list(ctx.getChildren())
-        return Aplicacio(self.visit(absOp), self.visit(expr))
+        varTipus = self.taulaTipus[0]
+        self.taulaTipus.pop(0)
+        return Aplicacio(esq=self.visit(absOp), dre=self.visit(expr), tipus=varTipus)
 
 
     # Visit a parse tree produced by hmParser#recurApli.
     def visitRecursivaAplicacio(self, ctx:hmParser.RecursivaAplicacioContext):
         [apli, expr] = list(ctx.getChildren())
-        return Aplicacio(self.visit(apli), self.visit(expr))
+        varTipus = self.taulaTipus[0]
+        self.taulaTipus.pop(0)
+        return Aplicacio(esq=self.visit(apli), dre=self.visit(expr), tipus=varTipus)
 
 
     # Visit a parse tree produced by hmParser#abstraccio.
@@ -115,30 +121,32 @@ class hinnerVisitor(ParseTreeVisitor):
     # Visit a parse tree produced by hmParser#var.
     def visitVar(self, ctx:hmParser.VarContext):
         [var] = list(ctx.getChildren())
-        return Variable(var.getText())
+        varTipus = self.taulaTipus[0]
+        self.taulaTipus.pop(0)
+        return Variable(id=var.getText(), tipus=varTipus)
 
 
     # Visit a parse tree produced by hmParser#num.
     def visitNum(self, ctx:hmParser.NumContext):
         [num] = list(ctx.getChildren())
-        return Numero(int(num.getText()))
+        return Numero(val=int(num.getText()), tipus='N')
     
 
     # Visit a parse tree produced by hmParser#multOp.
     def visitMultOp(self, ctx:hmParser.MultOpContext):
-        return Operador(Op('*'))
+        return Operador(Op('*'), tipus='(N -> (N -> N))')
 
 
     # Visit a parse tree produced by hmParser#divOp.
     def visitDivOp(self, ctx:hmParser.DivOpContext):
-        return Operador(Op('/'))
+        return Operador(Op('/'), tipus='(N -> (N -> N))')
 
 
     # Visit a parse tree produced by hmParser#sumOp.
     def visitSumOp(self, ctx:hmParser.SumOpContext):
-        return Operador(Op('+'))
+        return Operador(Op('+'), tipus='(N -> (N -> N))')
 
 
     # Visit a parse tree produced by hmParser#restaOp.
     def visitRestaOp(self, ctx:hmParser.RestaOpContext):
-        return Operador(Op('-'))
+        return Operador(Op('-'), tipus='(N -> (N -> N))')
