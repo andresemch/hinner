@@ -32,14 +32,14 @@ class hinnerVisitor(ParseTreeVisitor):
         symbol = self.visit(ctx.left).val
         type_info = self.visit(ctx.right)
 
-        return {symbol: [type_info]}
+        return {symbol: type_info}
 
     # Visit a parse tree produced by hmParser#opTipus.
     def visitOpTipus(self, ctx:hmParser.OpTipusContext):
         symbol = self.visit(ctx.left).op.value
         type_info = self.visit(ctx.right)
 
-        return {symbol: [type_info]}
+        return {symbol: type_info}
 
     # Visit a parse tree produced by hmParser#funcTipus.
     def visitFuncTipus(self, ctx:hmParser.FuncTipusContext):
@@ -85,38 +85,6 @@ class hinnerVisitor(ParseTreeVisitor):
         varTipus = self.taulaTipus[0]
         self.taulaTipus.pop(0)
         return Aplicacio(esq=self.visit(apli), dre=self.visit(expr), tipus=varTipus)
-
-
-    # Visit a parse tree produced by hmParser#abstraccio.
-    # def visitAbstraccio(self, ctx:hmParser.AbstraccioContext):
-    #     left = ctx.left
-    #     right = ctx.out
-
-    #     return Abstraccio(self.visit(left), self.visit(right))
-
-
-    # # Visit a parse tree produced by hmParser#opApp.
-    # def visitOpApp(self, ctx:hmParser.OpAppContext):
-    #     left = ctx.left
-    #     right = ctx.right
-
-    #     return Aplicacio(self.visit(left), self.visit(right))
-
-
-    # # Visit a parse tree produced by hmParser#extApp.
-    # def visitExtApp(self, ctx:hmParser.ExtAppContext):
-    #     left = ctx.left
-    #     right = ctx.right
-
-    #     return Aplicacio(self.visit(left), self.visit(right))
-
-
-    # # Visit a parse tree produced by hmParser#absApp.
-    # def visitAbsApp(self, ctx:hmParser.AbsAppContext):
-    #     left = ctx.left
-    #     right = ctx.right
-
-    #     return Aplicacio(self.visit(left), self.visit(right))
     
     # Visit a parse tree produced by hmParser#var.
     def visitVar(self, ctx:hmParser.VarContext):

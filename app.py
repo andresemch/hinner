@@ -5,35 +5,31 @@ from hinnerVisitor import hinnerVisitor
 import pandas as pd
 
 def createType(keys, values):
-    df = pd.DataFrame(
-        {
-            "simbol": keys,
-            "tipus": values
-        }
-    )
-    table = st.dataframe(
-        df,
-        column_config={
-            "simbol": "Simbol",
-            "tipus": "Tipus",
-        },
-        width=500,
-        hide_index=True
-    )
-    return table
+    df = pd.DataFrame({
+        "simbol": keys,
+        "tipus": values
+    },
+    dtype=str)
+    return df
 
+def addType(new_keys, new_values):
+    print(len(new_values))
+    new_df = pd.DataFrame({
+        "simbol": new_keys,
+        "tipus": new_values
+    },
+    dtype=str)
+    updated_df = pd.concat([st.session_state.tipo_table, new_df], ignore_index=True)
+    st.session_state.tipo_table = updated_df
+    st.dataframe(st.session_state.tipo_table, width=500, hide_index=True)
 
-
-def addType(t, simbol, tipus):
-    t.add_rows(pd.DataFrame(
-        {
-            "simbol": [simbol],
-            "tipus": [tipus]
-        }
-    ))
 
 st.title("Analitzador de tipus HinNer")
 user_input = st.text_input("Expressió lambda:", "")
+
+if 'tipo_table' not in st.session_state:
+    st.session_state.tipo_table = createType([], [])
+
 tree, numErrors, syntaxExpr = syntaxInfo(user_input)
 
 if numErrors > 0:
@@ -48,12 +44,19 @@ else:
     print(syntaxExpr)
 
     if type(tree) is SemanticTree:
+        st.dataframe(st.session_state.tipo_table, width=500, hide_index=True)
         dotTree = tree.toDOT()
         st.graphviz_chart(dotTree)
+
+        # typeDict = tree.getTipus()
+        # createType(list(typeDict.keys()), list(typeDict.values()))
     else:
-        typeDict = {}
-        typeDict.update(tree)
-        createType(list(tree.keys()), list(tree.values()))
+        # typeDict = {}
+        # typeDict.update(tree)
+        # createType(list(tree.keys()), list(tree.values()))
+
+        addType(list(tree.keys()), list(tree.values()))
+        # addType(tabla, tree.keys(), tree.values())
 
 
 

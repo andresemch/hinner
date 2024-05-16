@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Union, Optional
+from typing import Union, Optional, Dict
 from enum import Enum
 
 
@@ -66,6 +66,25 @@ class SemanticTree:
         self.toDOTRecursive(self.root, dot)
         dot.append("}")
         return "\n".join(dot)
+    
+    def getTipus(self) -> Dict[str,str]:
+        dictTipus = {}
+        self.getTipusRecursive(self.root, dictTipus)
+        return dictTipus
+    
+    def getTipusRecursive(self, node, dictTipus):
+        if node is not None:
+             match node:
+                case Abstraccio(esq, dre) | Aplicacio(esq, dre):
+                    self.getTipusRecursive(esq, dictTipus)
+                    self.getTipusRecursive(dre, dictTipus)
+                case Numero(_) | Variable(_) | Operador(_):
+                    nodeString = termToString(node)
+                    parts = nodeString.split("\n")
+                    key = parts[0].strip()
+                    value = parts[1].strip()
+                    dictTipus[key] = value
+                    pass
     
     def toDOTRecursive(self, node, dot):
         match node:
