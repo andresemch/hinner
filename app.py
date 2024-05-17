@@ -13,7 +13,6 @@ def createType(keys, values):
     return df
 
 def addType(new_keys, new_values):
-    print(len(new_values))
     new_df = pd.DataFrame({
         "simbol": new_keys,
         "tipus": new_values
@@ -38,25 +37,18 @@ if numErrors > 0:
 else:
     visitor = hinnerVisitor()
     tree = visitor.visit(tree)
-
-    dotTree = SemanticTree(None).toDOT()
-
     print(syntaxExpr)
 
+    ##### FALTA
+        # 4b
+        # No añadir repetidos a la lista de tipo_table
     if type(tree) is SemanticTree:
-        st.dataframe(st.session_state.tipo_table, width=500, hide_index=True)
-        dotTree = tree.toDOT()
-        st.graphviz_chart(dotTree)
-
-        # typeDict = tree.getTipus()
-        # createType(list(typeDict.keys()), list(typeDict.values()))
+        if not tree.is_empty():
+            st.dataframe(st.session_state.tipo_table, width=500, hide_index=True)
+            dotTree = tree.toDOT(st.session_state.tipo_table)
+            st.graphviz_chart(dotTree)
     else:
-        # typeDict = {}
-        # typeDict.update(tree)
-        # createType(list(tree.keys()), list(tree.values()))
-
         addType(list(tree.keys()), list(tree.values()))
-        # addType(tabla, tree.keys(), tree.values())
 
 
 

@@ -1,98 +1,84 @@
 from dataclasses import dataclass, field
-from typing import Union, Optional, Dict
+from typing import Union, Optional, Dict, List
 from enum import Enum
 
 
 class Op(Enum):
-    SUM = '+'
-    SUB = '-'
-    MUL = '*'
-    DIV = '/'
+    SUM = '(+)'
+    SUB = '(-)'
+    MUL = '(*)'
+    DIV = '(/)'
 
 @dataclass
 class Numero:
-    val: int
-    tipus: Optional[str] = None
+    val: str
 
 @dataclass
 class Variable:
     id: str
-    tipus: Optional[str] = None
 
 @dataclass
 class Operador:
     op: Op
-    tipus: Optional[str] = None
 
 @dataclass
 class Aplicacio:
     esq: Union['Aplicacio', 'Operador']
     dre: 'Expr'
-    tipus: Optional[str] = None
 
 @dataclass
 class Abstraccio:
     esq: 'Variable'
     dre: 'Expr'
-    tipus: Optional[str] = None
 
 Expr = Abstraccio | Aplicacio | Variable | Numero
 
 
 def termToString(f):
-    tipus = f"\n{f.tipus}" if f.tipus else ""
     match f:
         case Abstraccio(_, _):
-            return f'λ{tipus}'
+            return 'λ'
         case Aplicacio(_, _):
-            # return '@'
-            return f'@{tipus}'
+            return '@'
         case Variable(iden):
-            return f'{iden}{tipus}'
+            return iden
         case Operador(op):
-            # return op.value
-            return f'({op.value}){tipus}'
+            return op.value
         case Numero(val):
-            # return str(val)
-            return f'{val}{tipus}'
+            return val
 
 @dataclass 
 class SemanticTree:
-    root: Expr
+    root: Optional[Expr] = None
     count: int = field(default=0)
+    tablaTipus: Dict[str, str] = field(default_factory=dict)
+    nousTipus: List[str] = field(default_factory=lambda: [chr(i) for i in range(ord('a'), ord('z') + 1)])
 
-    def toDOT(self):
+    def is_empty(self):
+        return self.root is None
+
+    def toDOT(self, df):
+        self.tablaTipus = df.set_index('simbol')['tipus'].to_dict()
         dot = ["graph {"]
         self.toDOTRecursive(self.root, dot)
         dot.append("}")
         return "\n".join(dot)
     
-    def getTipus(self) -> Dict[str,str]:
-        dictTipus = {}
-        self.getTipusRecursive(self.root, dictTipus)
-        return dictTipus
-    
-    def getTipusRecursive(self, node, dictTipus):
-        if node is not None:
-             match node:
-                case Abstraccio(esq, dre) | Aplicacio(esq, dre):
-                    self.getTipusRecursive(esq, dictTipus)
-                    self.getTipusRecursive(dre, dictTipus)
-                case Numero(_) | Variable(_) | Operador(_):
-                    nodeString = termToString(node)
-                    parts = nodeString.split("\n")
-                    key = parts[0].strip()
-                    value = parts[1].strip()
-                    dictTipus[key] = value
-                    pass
-    
     def toDOTRecursive(self, node, dot):
+        nodeStr = termToString(node)
+        
+        if nodeStr in self.tablaTipus:
+            nodeStr += f"\n{self.tablaTipus[termToString(node)]}"
+        else:
+            nodeStr += f"\n{self.nousTipus[0]}"
+            self.nousTipus.pop(0)
+
         match node:
             case Abstraccio(inp, out):
                 nodeIden = self.count
                 self.count = self.count + 1
                     
-                dot.append(f'   {nodeIden} [label="{termToString(node)}"]')
+                dot.append(f'   {nodeIden} [label="{nodeStr}"]')
                 fillEsq = self.count
                 
                 self.toDOTRecursive(inp, dot)
@@ -106,7 +92,7 @@ class SemanticTree:
                 nodeIden = self.count
                 self.count = self.count + 1
                     
-                dot.append(f'   {nodeIden} [label="{termToString(node)}"]')
+                dot.append(f'   {nodeIden} [label="{nodeStr}"]')
                 fillEsq = self.count
                 
                 self.toDOTRecursive(func, dot)
@@ -119,14 +105,14 @@ class SemanticTree:
             case Variable(iden):
                 nodeIden = self.count
                 self.count = self.count + 1
-                dot.append(f'   {nodeIden} [label="{termToString(node)}"]')
+                dot.append(f'   {nodeIden} [label="{nodeStr}"]')
 
             case Operador(op):
                 nodeIden = self.count
                 self.count = self.count + 1
-                dot.append(f'   {nodeIden} [label="{termToString(node)}"]')
+                dot.append(f'   {nodeIden} [label="{nodeStr}"]')
                 
             case Numero(val):
                 nodeIden = self.count
                 self.count = self.count + 1
-                dot.append(f'   {nodeIden} [label="{termToString(node)}"]')
+                dot.append(f'   {nodeIden} [label="{nodeStr}"]')
