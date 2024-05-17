@@ -4,7 +4,7 @@ from syntax import syntaxInfo
 from hinnerVisitor import hinnerVisitor
 import pandas as pd
 
-def createType(keys, values):
+def creaTaula(keys, values):
     df = pd.DataFrame({
         "simbol": keys,
         "tipus": values
@@ -12,43 +12,45 @@ def createType(keys, values):
     dtype=str)
     return df
 
-def addType(new_keys, new_values):
-    new_df = pd.DataFrame({
-        "simbol": new_keys,
-        "tipus": new_values
+def addTipus(keys, values):
+    addDf = pd.DataFrame({
+        "simbol": keys,
+        "tipus": values
     },
     dtype=str)
-    updated_df = pd.concat([st.session_state.tipo_table, new_df], ignore_index=True)
-    st.session_state.tipo_table = updated_df
-    st.dataframe(st.session_state.tipo_table, width=500, hide_index=True)
+
+    listaKeys = set(st.session_state.taulaTipus['simbol'])
+    existValue = addDf[~addDf['simbol'].isin(listaKeys)]
+
+    if not existValue.empty:
+        nouDf = pd.concat([st.session_state.taulaTipus, addDf], ignore_index=True)
+        st.session_state.taulaTipus = nouDf
+    st.dataframe(st.session_state.taulaTipus, width=500, hide_index=True)
 
 
 st.title("Analitzador de tipus HinNer")
 user_input = st.text_input("Expressió lambda:", "")
 
-if 'tipo_table' not in st.session_state:
-    st.session_state.tipo_table = createType([], [])
+if 'taulaTipus' not in st.session_state:
+    st.session_state.taulaTipus = creaTaula([], [])
 
-tree, numErrors, syntaxExpr = syntaxInfo(user_input)
+tree, errors, syntax = syntaxInfo(user_input)
 
-if numErrors > 0:
-    st.write("Number of syntax errors: ", numErrors)
-    st.write("Parsing of syntax: ", syntaxExpr)
+if errors > 0:
+    st.write("Number of syntax errors: ", errors)
+    st.write("Parsing of syntax: ", syntax)
 else:
     visitor = hinnerVisitor()
     tree = visitor.visit(tree)
-    print(syntaxExpr)
+    print(syntax)
 
-    ##### FALTA
-        # 4b
-        # No añadir repetidos a la lista de tipo_table
     if type(tree) is SemanticTree:
         if not tree.is_empty():
-            st.dataframe(st.session_state.tipo_table, width=500, hide_index=True)
-            dotTree = tree.toDOT(st.session_state.tipo_table)
+            st.dataframe(st.session_state.taulaTipus, width=500, hide_index=True)
+            dotTree = tree.toDOT(st.session_state.taulaTipus)
             st.graphviz_chart(dotTree)
     else:
-        addType(list(tree.keys()), list(tree.values()))
+        addTipus(list(tree.keys()), list(tree.values()))
 
 
 

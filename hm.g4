@@ -46,7 +46,7 @@ tipus : elemTipus '->' tipus    #funcTipus
     | elemTipus             #basicTipus
     ;
 
-elemTipus : 'N'
+elemTipus : TIPUS
     ;
 
 // tipus : VAR '::' TIPUS                               #tipusLiteral

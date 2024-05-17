@@ -70,7 +70,8 @@ class SemanticTree:
         if nodeStr in self.tablaTipus:
             nodeStr += f"\n{self.tablaTipus[termToString(node)]}"
         else:
-            self.tablaTipus[nodeStr] = self.nousTipus[0]
+            if nodeStr not in ('@', 'λ'):
+                self.tablaTipus[nodeStr] = self.nousTipus[0]
             nodeStr += f"\n{self.nousTipus[0]}"
             self.nousTipus.pop(0)
 

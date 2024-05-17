@@ -17,7 +17,7 @@ public class hmParser extends Parser {
 		new PredictionContextCache();
 	public static final int
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
-		T__9=10, NUM=11, VAR=12, TIPUS=13, OP=14, WS=15;
+		NUM=10, VAR=11, TIPUS=12, OP=13, WS=14;
 	public static final int
 		RULE_root = 0, RULE_exprTipus = 1, RULE_tipus = 2, RULE_elemTipus = 3, 
 		RULE_expr = 4, RULE_abstraccio = 5, RULE_aplicacio = 6, RULE_var = 7, 
@@ -32,15 +32,14 @@ public class hmParser extends Parser {
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, "'::'", "'('", "')'", "'->'", "'N'", "'\\'", "'*'", "'/'", "'+'", 
-			"'-'"
+			null, "'::'", "'('", "')'", "'->'", "'\\'", "'*'", "'/'", "'+'", "'-'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, null, null, null, null, null, null, null, null, null, null, "NUM", 
-			"VAR", "TIPUS", "OP", "WS"
+			null, null, null, null, null, null, null, null, null, null, "NUM", "VAR", 
+			"TIPUS", "OP", "WS"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -329,6 +328,7 @@ public class hmParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class ElemTipusContext extends ParserRuleContext {
+		public TerminalNode TIPUS() { return getToken(hmParser.TIPUS, 0); }
 		public ElemTipusContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -342,7 +342,7 @@ public class hmParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(44);
-			match(T__4);
+			match(TIPUS);
 			}
 		}
 		catch (RecognitionException re) {
@@ -386,7 +386,7 @@ public class hmParser extends Parser {
 			setState(51);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case T__5:
+			case T__4:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(46);
@@ -414,10 +414,10 @@ public class hmParser extends Parser {
 				num();
 				}
 				break;
+			case T__5:
 			case T__6:
 			case T__7:
 			case T__8:
-			case T__9:
 				enterOuterAlt(_localctx, 5);
 				{
 				setState(50);
@@ -460,7 +460,7 @@ public class hmParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(53);
-			match(T__5);
+			match(T__4);
 			setState(54);
 			var();
 			setState(55);
@@ -541,16 +541,16 @@ public class hmParser extends Parser {
 			setState(62);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case T__5:
+			case T__4:
 				{
 				setState(60);
 				abstraccio();
 				}
 				break;
+			case T__5:
 			case T__6:
 			case T__7:
 			case T__8:
-			case T__9:
 				{
 				setState(61);
 				op();
@@ -696,36 +696,36 @@ public class hmParser extends Parser {
 			setState(82);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case T__6:
+			case T__5:
 				_localctx = new MultOpContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(78);
-				match(T__6);
+				match(T__5);
 				}
 				break;
-			case T__7:
+			case T__6:
 				_localctx = new DivOpContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(79);
-				match(T__7);
+				match(T__6);
 				}
 				break;
-			case T__8:
+			case T__7:
 				_localctx = new SumOpContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(80);
-				match(T__8);
+				match(T__7);
 				}
 				break;
-			case T__9:
+			case T__8:
 				_localctx = new RestaOpContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(81);
-				match(T__9);
+				match(T__8);
 				}
 				break;
 			default:
@@ -759,7 +759,7 @@ public class hmParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\u0004\u0001\u000fU\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
+		"\u0004\u0001\u000eU\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
 		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0002"+
 		"\u0005\u0007\u0005\u0002\u0006\u0007\u0006\u0002\u0007\u0007\u0007\u0002"+
 		"\b\u0007\b\u0002\t\u0007\t\u0001\u0000\u0001\u0000\u0001\u0000\u0003\u0000"+
@@ -789,25 +789,25 @@ public class hmParser extends Parser {
 		"\u0001\u0000\u0000\u0000$\u0003\u0001\u0000\u0000\u0000%&\u0003\u0006"+
 		"\u0003\u0000&\'\u0005\u0004\u0000\u0000\'(\u0003\u0004\u0002\u0000(+\u0001"+
 		"\u0000\u0000\u0000)+\u0003\u0006\u0003\u0000*%\u0001\u0000\u0000\u0000"+
-		"*)\u0001\u0000\u0000\u0000+\u0005\u0001\u0000\u0000\u0000,-\u0005\u0005"+
-		"\u0000\u0000-\u0007\u0001\u0000\u0000\u0000.4\u0003\n\u0005\u0000/4\u0003"+
-		"\f\u0006\u000004\u0003\u000e\u0007\u000014\u0003\u0010\b\u000024\u0003"+
-		"\u0012\t\u00003.\u0001\u0000\u0000\u00003/\u0001\u0000\u0000\u000030\u0001"+
-		"\u0000\u0000\u000031\u0001\u0000\u0000\u000032\u0001\u0000\u0000\u0000"+
-		"4\t\u0001\u0000\u0000\u000056\u0005\u0006\u0000\u000067\u0003\u000e\u0007"+
-		"\u000078\u0005\u0004\u0000\u000089\u0003\b\u0004\u00009\u000b\u0001\u0000"+
-		"\u0000\u0000:;\u0006\u0006\uffff\uffff\u0000;>\u0005\u0002\u0000\u0000"+
-		"<?\u0003\n\u0005\u0000=?\u0003\u0012\t\u0000><\u0001\u0000\u0000\u0000"+
-		">=\u0001\u0000\u0000\u0000?@\u0001\u0000\u0000\u0000@A\u0005\u0003\u0000"+
-		"\u0000AB\u0003\b\u0004\u0000BG\u0001\u0000\u0000\u0000CD\n\u0002\u0000"+
-		"\u0000DF\u0003\b\u0004\u0000EC\u0001\u0000\u0000\u0000FI\u0001\u0000\u0000"+
-		"\u0000GE\u0001\u0000\u0000\u0000GH\u0001\u0000\u0000\u0000H\r\u0001\u0000"+
-		"\u0000\u0000IG\u0001\u0000\u0000\u0000JK\u0005\f\u0000\u0000K\u000f\u0001"+
-		"\u0000\u0000\u0000LM\u0005\u000b\u0000\u0000M\u0011\u0001\u0000\u0000"+
-		"\u0000NS\u0005\u0007\u0000\u0000OS\u0005\b\u0000\u0000PS\u0005\t\u0000"+
-		"\u0000QS\u0005\n\u0000\u0000RN\u0001\u0000\u0000\u0000RO\u0001\u0000\u0000"+
-		"\u0000RP\u0001\u0000\u0000\u0000RQ\u0001\u0000\u0000\u0000S\u0013\u0001"+
-		"\u0000\u0000\u0000\u0007\u0017#*3>GR";
+		"*)\u0001\u0000\u0000\u0000+\u0005\u0001\u0000\u0000\u0000,-\u0005\f\u0000"+
+		"\u0000-\u0007\u0001\u0000\u0000\u0000.4\u0003\n\u0005\u0000/4\u0003\f"+
+		"\u0006\u000004\u0003\u000e\u0007\u000014\u0003\u0010\b\u000024\u0003\u0012"+
+		"\t\u00003.\u0001\u0000\u0000\u00003/\u0001\u0000\u0000\u000030\u0001\u0000"+
+		"\u0000\u000031\u0001\u0000\u0000\u000032\u0001\u0000\u0000\u00004\t\u0001"+
+		"\u0000\u0000\u000056\u0005\u0005\u0000\u000067\u0003\u000e\u0007\u0000"+
+		"78\u0005\u0004\u0000\u000089\u0003\b\u0004\u00009\u000b\u0001\u0000\u0000"+
+		"\u0000:;\u0006\u0006\uffff\uffff\u0000;>\u0005\u0002\u0000\u0000<?\u0003"+
+		"\n\u0005\u0000=?\u0003\u0012\t\u0000><\u0001\u0000\u0000\u0000>=\u0001"+
+		"\u0000\u0000\u0000?@\u0001\u0000\u0000\u0000@A\u0005\u0003\u0000\u0000"+
+		"AB\u0003\b\u0004\u0000BG\u0001\u0000\u0000\u0000CD\n\u0002\u0000\u0000"+
+		"DF\u0003\b\u0004\u0000EC\u0001\u0000\u0000\u0000FI\u0001\u0000\u0000\u0000"+
+		"GE\u0001\u0000\u0000\u0000GH\u0001\u0000\u0000\u0000H\r\u0001\u0000\u0000"+
+		"\u0000IG\u0001\u0000\u0000\u0000JK\u0005\u000b\u0000\u0000K\u000f\u0001"+
+		"\u0000\u0000\u0000LM\u0005\n\u0000\u0000M\u0011\u0001\u0000\u0000\u0000"+
+		"NS\u0005\u0006\u0000\u0000OS\u0005\u0007\u0000\u0000PS\u0005\b\u0000\u0000"+
+		"QS\u0005\t\u0000\u0000RN\u0001\u0000\u0000\u0000RO\u0001\u0000\u0000\u0000"+
+		"RP\u0001\u0000\u0000\u0000RQ\u0001\u0000\u0000\u0000S\u0013\u0001\u0000"+
+		"\u0000\u0000\u0007\u0017#*3>GR";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
