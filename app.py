@@ -27,6 +27,21 @@ def addTipus(keys, values):
         st.session_state.taulaTipus = nouDf
     st.dataframe(st.session_state.taulaTipus, width=500, hide_index=True)
 
+def addTipusInfer(keys, values):
+    addDf = pd.DataFrame({
+        "simbol": keys,
+        "tipus": values
+    },
+    dtype=str)
+
+    listaKeys = set(st.session_state.taulaTipusInfer['simbol'])
+    existValue = addDf[~addDf['simbol'].isin(listaKeys)]
+
+    if not existValue.empty:
+        nouDf = pd.concat([st.session_state.taulaTipusInfer, addDf], ignore_index=True)
+        st.session_state.taulaTipusInfer = nouDf
+    st.dataframe(st.session_state.taulaTipusInfer, width=500, hide_index=True)
+
 
 st.title("Analitzador de tipus HinNer")
 user_input = st.text_input("Expressió lambda:", "")
@@ -49,6 +64,14 @@ else:
             st.dataframe(st.session_state.taulaTipus, width=500, hide_index=True)
             dotTree = tree.toDOT(st.session_state.taulaTipus)
             st.graphviz_chart(dotTree)
+
+            taulaTipusInfer = tree.infer_types()
+            dotTreeInfer = tree.toDOTinfer()
+            st.graphviz_chart(dotTreeInfer)
+            if 'taulaTipusInfer' not in st.session_state:
+                st.session_state.taulaTipusInfer = creaTaula([], [])
+            addTipusInfer(list(taulaTipusInfer.keys()), list(taulaTipusInfer.values()))
+            
     else:
         addTipus(list(tree.keys()), list(tree.values()))
 

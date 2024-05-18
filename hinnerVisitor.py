@@ -6,6 +6,9 @@ from semanticTree import *
 
 class hinnerVisitor(ParseTreeVisitor):
 
+    def __init__(self) -> None:
+        self.idsAplicacio = [str(i) for i in range(1,28)]
+
     # Visit a parse tree produced by hmParser#rootExpr.
     def visitRootExpr(self, ctx:hmParser.RootExprContext):
         [expr] = ctx.getChildren()
@@ -66,13 +69,17 @@ class hinnerVisitor(ParseTreeVisitor):
     # Visit a parse tree produced by hmParser#parenApli.
     def visitParentesiAplicacio(self, ctx:hmParser.ParentesiAplicacioContext):
         [_, absOp, _, expr] = list(ctx.getChildren())
-        return Aplicacio(esq=self.visit(absOp), dre=self.visit(expr))
+        idApli = self.idsAplicacio[0]
+        self.idsAplicacio.pop(0)
+        return Aplicacio(esq=self.visit(absOp), dre=self.visit(expr), id=idApli)
 
 
     # Visit a parse tree produced by hmParser#recurApli.
     def visitRecursivaAplicacio(self, ctx:hmParser.RecursivaAplicacioContext):
         [apli, expr] = list(ctx.getChildren())
-        return Aplicacio(esq=self.visit(apli), dre=self.visit(expr))
+        idApli = self.idsAplicacio[0]
+        self.idsAplicacio.pop(0)
+        return Aplicacio(esq=self.visit(apli), dre=self.visit(expr), id=idApli)
     
     # Visit a parse tree produced by hmParser#var.
     def visitVar(self, ctx:hmParser.VarContext):
