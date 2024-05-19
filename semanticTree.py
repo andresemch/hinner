@@ -232,6 +232,12 @@ class SemanticTree:
             # input_type = input_type.strip().strip('()')
             # output_type = output_type.strip().strip('()')
 
+            print(input_type)
+            print(arg_type)
+
+            if arg_type.isupper() and arg_type != input_type:
+                raise TypeError(f"Type error: {input_type} vs {arg_type}")
+
             if arg_type.strip().islower(): # arg_type no tiene un tipo asignado
                 # HAZ ALGO CON EL TIPO ARG_TYPE
                 self.tablaInferTipus[arg_type] = input_type
