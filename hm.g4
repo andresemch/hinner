@@ -1,36 +1,3 @@
-// grammar hm;
-
-
-// root: instru* EOF;
-
-// instru:
-//     expr
-//     | abstraccio
-//     | aplicacio
-//     ;
-
-// expr:
-//     '(' expr ')'        # parentesi
-//     | '(^)' expr expr   # potencia
-//     | ( '(*)' | '(/)' ) expr expr   # multDiv
-//     | ( '(+)' | '(-)' ) expr expr   # sumaResta
-//     | NUM               # numero
-//     | VAR               # variable
-//     ;
-
-// abstraccio: '\\' VAR '->' expr;
-
-// aplicacio: abstraccio expr;
-
-// NUM : [0-9]+ ;
-// VAR : [a-zA-Z]+ ;
-// WS  : [ \t\n\r]+ -> skip ;
-
-
-////////////////////////////////////////
-
-
-
 grammar hm;
 
 root : expr               #rootExpr
@@ -49,14 +16,8 @@ tipus : elemTipus '->' tipus    #funcTipus
 elemTipus : TIPUS
     ;
 
-// tipus : VAR '::' TIPUS                               #tipusLiteral
-//     | '(' op ')' '::' TIPUS '->' TIPUS '->' TIPUS    #tipusFunc
-//     ;
-
-
-// Punt d'entrada de la gramàtica
 expr : abstraccio   
-    | aplicacio   
+    | aplicacio
     | var           
     | num
     | op
@@ -82,7 +43,6 @@ op : '*'    #multOp
     ;
 
 
-// Tokens
 NUM : [0-9]+ ;
 
 VAR : [a-z][a-zA-Z_0-9]* ;
@@ -91,7 +51,6 @@ TIPUS : [A-Z]+ ;
 
 OP : '+' | '-' | '*' | '/';
 
-// Ignorar espais en blanc
 WS      : [ \t\r\n]+ -> skip            // Ignorar espais en blanc
         ;
 

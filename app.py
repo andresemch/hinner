@@ -1,46 +1,53 @@
+from antlr4 import *
+from hmLexer import hmLexer
+from hmParser import hmParser
 import streamlit as st
 from semanticTree import SemanticTree
-from syntax import syntaxInfo
 from hinnerVisitor import hinnerVisitor
 import pandas as pd
+
+
+def syntaxInfo(input):
+    lexer = hmLexer(InputStream(input))
+    token_stream = CommonTokenStream(lexer)
+    parser = hmParser(token_stream)
+    parseTree = parser.root()
+    numErrors = parser.getNumberOfSyntaxErrors()
+    syntaxExpr = parseTree.toStringTree(recog=parser)
+    return parseTree, numErrors, syntaxExpr
+
 
 def creaTaula(keys, values):
     df = pd.DataFrame({
         "simbol": keys,
         "tipus": values
     },
-    dtype=str)
+        dtype=str)
     return df
 
-def addTipus(keys, values):
+
+def addTipus(keys, values, infer):
     addDf = pd.DataFrame({
         "simbol": keys,
         "tipus": values
-    },
-    dtype=str)
+    }, dtype=str)
 
-    listaKeys = set(st.session_state.taulaTipus['simbol'])
-    existValue = addDf[~addDf['simbol'].isin(listaKeys)]
+    if infer:
+        taula = st.session_state.taulaTipusInfer
+    else:
+        taula = st.session_state.taulaTipus
 
-    if not existValue.empty:
-        nouDf = pd.concat([st.session_state.taulaTipus, addDf], ignore_index=True)
-        st.session_state.taulaTipus = nouDf
-    st.dataframe(st.session_state.taulaTipus, width=500, hide_index=True)
+    for _, row in addDf.iterrows():
+        if row['simbol'] in taula['simbol'].values:
+            taula.loc[taula['simbol'] == row['simbol'], 'tipus'] = row['tipus']
+        else:
+            taula = pd.concat([taula, pd.DataFrame([row])], ignore_index=True)
 
-def addTipusInfer(keys, values):
-    addDf = pd.DataFrame({
-        "simbol": keys,
-        "tipus": values
-    },
-    dtype=str)
-
-    listaKeys = set(st.session_state.taulaTipusInfer['simbol'])
-    existValue = addDf[~addDf['simbol'].isin(listaKeys)]
-
-    if not existValue.empty:
-        nouDf = pd.concat([st.session_state.taulaTipusInfer, addDf], ignore_index=True)
-        st.session_state.taulaTipusInfer = nouDf
-    st.dataframe(st.session_state.taulaTipusInfer, width=500, hide_index=True)
+    if infer:
+        st.session_state.taulaTipusInfer = taula
+    else:
+        st.session_state.taulaTipus = taula
+    st.dataframe(taula, width=500, hide_index=True)
 
 
 st.title("Analitzador de tipus HinNer")
@@ -57,23 +64,24 @@ if errors > 0:
 else:
     visitor = hinnerVisitor()
     tree = visitor.visit(tree)
-    print(syntax)
 
-    if type(tree) is SemanticTree:
+    if isinstance(tree, SemanticTree):
         if not tree.is_empty():
-            st.dataframe(st.session_state.taulaTipus, width=500, hide_index=True)
-            dotTree = tree.toDOT(st.session_state.taulaTipus)
+            st.dataframe(
+                st.session_state.taulaTipus,
+                width=500,
+                hide_index=True)
+            dotTree = tree.toDOT(st.session_state.taulaTipus, False)
             st.graphviz_chart(dotTree)
 
-            taulaTipusInfer = tree.infer_types()
-            dotTreeInfer = tree.toDOTinfer()
+            taulaTipusInfer = tree.inferTypes()
+            dotTreeInfer = tree.toDOT(None, True)
             st.graphviz_chart(dotTreeInfer)
-            if 'taulaTipusInfer' not in st.session_state:
-                st.session_state.taulaTipusInfer = creaTaula([], [])
-            addTipusInfer(list(taulaTipusInfer.keys()), list(taulaTipusInfer.values()))
-            
+            st.session_state.taulaTipusInfer = creaTaula([], [])
+            addTipus(
+                list(
+                    taulaTipusInfer.keys()), list(
+                    taulaTipusInfer.values()), True)
+
     else:
-        addTipus(list(tree.keys()), list(tree.values()))
-
-
-
+        addTipus(list(tree.keys()), list(tree.values()), False)
