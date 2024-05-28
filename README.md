@@ -30,7 +30,7 @@ Hi han implementacions de funcions d'inferència de tipus per a diferents constr
 
 - **Aplicació**:
 
-![Exemple de inferencia de tipus amb aplicació](images/abstr.png)
+![Exemple de inferencia de tipus amb aplicació](images/abst.png)
 
 - **Abstracció**: Afegit el processament de l'abstracció per a inferir correctament els tipus en expressions més complexes.
 
