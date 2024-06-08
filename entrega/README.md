@@ -28,13 +28,13 @@ S'han modificat els arbres semàntics per permetre l'assignació d'un tipus a ca
 ### Inferència de Tipus
 Hi han implementacions de funcions d'inferència de tipus per a diferents construccions. Això inclou la visualització en una taula dels tipus de totes les variables de tipus, proporcionant una visió clara de la inferència de tipus realitzada pel sistema.
 
-- **Aplicació**: Conté funcionalitat per a inferir tipus amb construccions que continguin aplicacions.
+- **Aplicació**:
 
-![Exemple de inferencia de tipus amb aplicació](images/apli.png)
+![Exemple de inferencia de tipus amb aplicació](images/abst.png)
 
-- **Abstracció**: Conté funcionalitat per a inferir tipus amb construccions més complexes que continguin abstraccions.
+- **Abstracció**: Afegit el processament de l'abstracció per a inferir correctament els tipus en expressions més complexes.
 
-![Exemple de inferencia de tipus amb abstracció](images/abst.png)
+![Exemple de inferencia de tipus amb abstracció](images/apli.png)
 
 ## Referències
 
