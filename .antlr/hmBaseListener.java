@@ -16,13 +16,25 @@ public class hmBaseListener implements hmListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpressio(hmParser.ExpressioContext ctx) { }
+	@Override public void enterRootExpr(hmParser.RootExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpressio(hmParser.ExpressioContext ctx) { }
+	@Override public void exitRootExpr(hmParser.RootExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterRootTipus(hmParser.RootTipusContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRootTipus(hmParser.RootTipusContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -40,49 +52,61 @@ public class hmBaseListener implements hmListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDefTipus(hmParser.DefTipusContext ctx) { }
+	@Override public void enterNumTipus(hmParser.NumTipusContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDefTipus(hmParser.DefTipusContext ctx) { }
+	@Override public void exitNumTipus(hmParser.NumTipusContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTipusBasic(hmParser.TipusBasicContext ctx) { }
+	@Override public void enterOpTipus(hmParser.OpTipusContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTipusBasic(hmParser.TipusBasicContext ctx) { }
+	@Override public void exitOpTipus(hmParser.OpTipusContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTipusFunc(hmParser.TipusFuncContext ctx) { }
+	@Override public void enterVarTipus(hmParser.VarTipusContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTipusFunc(hmParser.TipusFuncContext ctx) { }
+	@Override public void exitVarTipus(hmParser.VarTipusContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBasic(hmParser.BasicContext ctx) { }
+	@Override public void enterFuncTipus(hmParser.FuncTipusContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBasic(hmParser.BasicContext ctx) { }
+	@Override public void exitFuncTipus(hmParser.FuncTipusContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBasicTipus(hmParser.BasicTipusContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBasicTipus(hmParser.BasicTipusContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
