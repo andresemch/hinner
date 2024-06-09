@@ -5,15 +5,13 @@ root : expr               #rootExpr
     | EOF                 #endfile
     ;
 
-exprTipus : left=num '::' right=elemTipus       #numTipus
+exprTipus : left=num '::' right=tipus       #numTipus
     | '(' left=op ')' '::' right=tipus      #opTipus
+    | left=var '::' right=tipus            #varTipus
     ;
 
-tipus : elemTipus '->' tipus    #funcTipus
-    | elemTipus             #basicTipus
-    ;
-
-elemTipus : TIPUS
+tipus : TIPUS '->' tipus    #funcTipus
+    | TIPUS             #basicTipus
     ;
 
 expr : abstraccio   

@@ -276,20 +276,23 @@ class hinnerVisitor(ParseTreeVisitor):
         type_info = self.visit(ctx.right)
 
         return {symbol: type_info}
+    
+    # Visit a parse tree produced by hmParser#varTipus.
+    def visitVarTipus(self, ctx:hmParser.VarTipusContext):
+        symbol = self.visit(ctx.left).id
+        type_info = self.visit(ctx.right)
+
+        return {symbol: type_info}
 
     # Visit a parse tree produced by hmParser#funcTipus.
     def visitFuncTipus(self, ctx: hmParser.FuncTipusContext):
-        left_type = self.visit(ctx.elemTipus())
+        left_type = ctx.TIPUS().getText()
         right_type = self.visit(ctx.tipus())
 
         return f"({left_type} -> {right_type})"
 
     # Visit a parse tree produced by hmParser#basicTipus.
     def visitBasicTipus(self, ctx: hmParser.BasicTipusContext):
-        return self.visit(ctx.elemTipus())
-
-    # Visit a parse tree produced by hmParser#elemTipus.
-    def visitElemTipus(self, ctx: hmParser.ElemTipusContext):
         return ctx.getText()
 
     # End
